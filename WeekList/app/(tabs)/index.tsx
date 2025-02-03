@@ -1,78 +1,110 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
+import React from "react";
+import { Colors } from "@/constants/Colors";
+import useThemeColor from "@/hooks/useThemeColor";
+import AppHeader from "@/components/card/AppHeader";
+import HomePageHeader from "@/components/headers/HomePageHeader";
+import ThisWeekSummary from "@/components/ThisWeekSummary";
+import LastWeekSummary from "@/components/LastWeekSummary";
+import { Link } from "expo-router";
+import { AppContextProvider } from "@/context/AppContext";
 
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+const homeDetailsDummyData = {
+  username: "Buddhika",
+  profilePicture: require("../../assets/images/profile-avatar-male.png"),
+  recentNote: "You have upcoming list today at: 5.30PM.",
+};
 
-export default function HomeScreen() {
+const App = () => {
+  const themeColor = useThemeColor() as keyof typeof Colors;
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            Colors[themeColor ?? "light"].appPreview.backGroundColor,
+        },
+      ]}
     >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome WeekList!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <AppHeader name="homePage" size={{ height: 150 }}>
+        <HomePageHeader
+          key={"homePageHeader"}
+          label="Welcome to WeekList!"
+          labelTextSize={16}
+          homeDetails={homeDetailsDummyData}
+        />
+      </AppHeader>
+      <View style={styles.infoContainer}>
+        <Link href={"/(tabs)/list"}>
+          <View style={styles.infoWithTopicContainer}>
+            <Text style={styles.summaryText}>This WeekList Summary</Text>
+            <AppContextProvider>
+              <ThisWeekSummary
+                currencyType="LKR"
+                allocatedBudget={15000}
+                totalExpenses={10000}
+                remainingItems={5}
+                extraPurchased={2}
+              />
+            </AppContextProvider>
+          </View>
+        </Link>
+        <View style={styles.infoWithTopicContainer}>
+          <Text style={styles.summaryText}>Last WeekList Summary</Text>
+          <LastWeekSummary
+            currencyType="LKR"
+            allocatedBudget={15000}
+            totalExpenses={5000}
+            remainingItems={4}
+            extraPurchased={6}
+          />
+        </View>
+      </View>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
+  container: {
+    flex: 1,
+    // flexGrow: 1,
+    flexDirection: "column",
+  },
+  infoContainer: {
+    flex: 1,
+    // flexGrow: 1,
+    flexDirection: "column",
     alignItems: "center",
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  infoWithTopicContainer: {
+    flexDirection: "column",
+    // alignItems: "center",
+    width: "100%",
+    height: "50%",
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+  text: {
+    color: "black",
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    margin: 1,
+    padding: 1,
+  },
+  logo: {
+    width: 50,
+    height: 50,
+  },
+  appName: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  summaryText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    margin: 12,
   },
 });
+
+export default App;

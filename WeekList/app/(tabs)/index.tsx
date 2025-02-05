@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { Colors } from "@/constants/Colors";
 import useThemeColor from "@/hooks/useThemeColor";
 import AppHeader from "@/components/card/AppHeader";
@@ -7,7 +7,7 @@ import HomePageHeader from "@/components/headers/HomePageHeader";
 import ThisWeekSummary from "@/components/ThisWeekSummary";
 import LastWeekSummary from "@/components/LastWeekSummary";
 import { Link } from "expo-router";
-import { AppContextProvider } from "@/context/AppContext";
+import { AppContext } from "@/context/AppContext";
 
 const homeDetailsDummyData = {
   username: "Buddhika",
@@ -17,6 +17,16 @@ const homeDetailsDummyData = {
 
 const App = () => {
   const themeColor = useThemeColor() as keyof typeof Colors;
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error(
+      "This Element require it to be used under a AppContextProvider."
+    );
+  }
+  const { appContext, setAppContext } = context;
+  const onWeekSummaryPressHandler = (listViewTab: number) => {
+    setAppContext({ ...appContext, listViewTab });
+  };
   return (
     <View
       style={[
@@ -36,30 +46,36 @@ const App = () => {
         />
       </AppHeader>
       <View style={styles.infoContainer}>
-        <Link href={"/(tabs)/list"}>
+        <Link
+          href={"/(tabs)/list"}
+          onPress={() => onWeekSummaryPressHandler(0)}
+        >
           <View style={styles.infoWithTopicContainer}>
             <Text style={styles.summaryText}>This WeekList Summary</Text>
-            <AppContextProvider>
-              <ThisWeekSummary
-                currencyType="LKR"
-                allocatedBudget={15000}
-                totalExpenses={10000}
-                remainingItems={5}
-                extraPurchased={2}
-              />
-            </AppContextProvider>
+            <ThisWeekSummary
+              currencyType="LKR"
+              allocatedBudget={15000}
+              totalExpenses={10000}
+              remainingItems={5}
+              extraPurchased={2}
+            />
           </View>
         </Link>
-        <View style={styles.infoWithTopicContainer}>
-          <Text style={styles.summaryText}>Last WeekList Summary</Text>
-          <LastWeekSummary
-            currencyType="LKR"
-            allocatedBudget={15000}
-            totalExpenses={5000}
-            remainingItems={4}
-            extraPurchased={6}
-          />
-        </View>
+        <Link
+          href={"/(tabs)/list"}
+          onPress={() => onWeekSummaryPressHandler(1)}
+        >
+          <View style={styles.infoWithTopicContainer}>
+            <Text style={styles.summaryText}>Last WeekList Summary</Text>
+            <LastWeekSummary
+              currencyType="LKR"
+              allocatedBudget={15000}
+              totalExpenses={5000}
+              remainingItems={4}
+              extraPurchased={6}
+            />
+          </View>
+        </Link>
       </View>
     </View>
   );

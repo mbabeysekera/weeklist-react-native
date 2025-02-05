@@ -4,7 +4,6 @@ import InfoBoxCard from "./card/InfoBoxCard";
 import useThemeColor from "@/hooks/useThemeColor";
 import { Colors } from "@/constants/Colors";
 import PresentageCard from "./card/PresentageCard";
-import { Currency } from "@/constants/CurrencyTypes";
 import { AppContext } from "@/context/AppContext";
 
 export interface ThisWeekSummaryProps {
@@ -31,22 +30,21 @@ const ThisWeekSummary = ({
   }
   const { appContext, setAppContext } = context;
 
-  useEffect(() => {
-    setAppContext({
-      ...appContext,
-      thisWeek: {
-        currencyType,
-        allocatedBudget,
-        totalExpenses,
-        remainingItems,
-        extraPurchased,
-      },
-    });
-  }, []);
-  const balance =
-    appContext.thisWeek.allocatedBudget - appContext.thisWeek.totalExpenses;
-  const savingAspercentage =
-    (balance / appContext.thisWeek.allocatedBudget) * 100;
+  // This will make sure the state is updated at component mount (https://stackoverflow.com/questions/62336340/cannot-update-a-component-while-rendering-a-different-component-warning)
+  // useEffect(() => {
+  //   setAppContext({
+  //     ...appContext,
+  //     thisWeek: {
+  //       currencyType,
+  //       allocatedBudget,
+  //       totalExpenses,
+  //       remainingItems,
+  //       extraPurchased,
+  //     },
+  //   });
+  // }, []);
+  const balance = allocatedBudget - totalExpenses;
+  const savingAspercentage = (balance / allocatedBudget) * 100;
   return (
     <InfoBoxCard
       size={{ width: "94%", height: 250 }}
@@ -77,7 +75,7 @@ const ThisWeekSummary = ({
                 },
               ]}
             >
-              {`${appContext.thisWeek.currencyType} ${appContext.thisWeek.allocatedBudget}`}
+              {`${currencyType} ${allocatedBudget}`}
             </Text>
           </View>
           <View style={styles.infoColumnContainer}>
@@ -101,7 +99,7 @@ const ThisWeekSummary = ({
                 },
               ]}
             >
-              {`${appContext.thisWeek.currencyType} ${appContext.thisWeek.totalExpenses}`}
+              {`${currencyType} ${totalExpenses}`}
             </Text>
           </View>
         </View>
@@ -163,7 +161,7 @@ const ThisWeekSummary = ({
                   },
                 ]}
               >
-                {appContext.thisWeek.remainingItems}
+                {remainingItems}
               </Text>
             </View>
           </View>
@@ -197,7 +195,7 @@ const ThisWeekSummary = ({
                   },
                 ]}
               >
-                {appContext.thisWeek.extraPurchased}
+                {extraPurchased}
               </Text>
             </View>
           </View>

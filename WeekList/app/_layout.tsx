@@ -12,6 +12,7 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "react-native";
 import React from "react";
+import { AppContextProvider } from "@/context/AppContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,12 +34,12 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <AppContextProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
-    </>
+    </AppContextProvider>
   );
 }

@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ListItem, { ListItemProps } from "@/components/card/ListItem";
 import ListTabHeader from "@/components/headers/ListTabHeader";
 
@@ -9,6 +9,7 @@ import AppHeader from "@/components/card/AppHeader";
 import useThemeColor from "@/hooks/useThemeColor";
 import ThisWeekSummary from "@/components/ThisWeekSummary";
 import LastWeekSummary from "@/components/LastWeekSummary";
+import { AppContext } from "@/context/AppContext";
 
 const dummyThisWeekLists: ListItemProps[] = [
   {
@@ -75,7 +76,17 @@ const headerIconsProps: HeaderIconProps[] = [
 const List = () => {
   // ToDo: API should load the list for this page
   const themeColor = useThemeColor() as keyof typeof Colors;
-  const [selectedTab, setSelectedTab] = useState(0);
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error(
+      "This Element require it to be used under a AppContextProvider."
+    );
+  }
+  const { appContext, setAppContext } = context;
+
+  const onTabPressHandler = (tabId: number) => {
+    setAppContext({ ...appContext, listViewTab: tabId });
+  };
   return (
     <View style={styles.container}>
       <AppHeader name="Lists" size={{ height: 100 }}>
@@ -83,11 +94,11 @@ const List = () => {
           key="weekListHeader"
           label="Lists"
           icons={headerIconsProps}
-          selectedTab={selectedTab}
-          onTabPress={setSelectedTab}
+          selectedTab={appContext.listViewTab}
+          onTabPress={onTabPressHandler}
         />
       </AppHeader>
-      {selectedTab === 0 && (
+      {appContext.listViewTab === 0 && (
         <>
           <ThisWeekSummary
             currencyType="LKR"
@@ -111,7 +122,7 @@ const List = () => {
           </View>
         </>
       )}
-      {selectedTab === 1 && (
+      {appContext.listViewTab === 1 && (
         <>
           <LastWeekSummary
             currencyType="LKR"

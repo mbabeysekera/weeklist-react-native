@@ -10,7 +10,7 @@ const HeaderTabs = ({ tabs }: HeaderTabsProps) => {
   const numberOfTabs = tabs.length;
   return (
     <View style={styles.container}>
-      <FlatList
+      {/* <FlatList
         horizontal={true}
         data={tabs}
         renderItem={(element) => {
@@ -26,7 +26,19 @@ const HeaderTabs = ({ tabs }: HeaderTabsProps) => {
           );
         }}
         contentContainerStyle={styles.tabStyle}
-      />
+      /> */}
+      {tabs.map((tab, index) => {
+        return (
+          <Tab.LabelName
+            key={index}
+            id={tab.id}
+            selectedTab={tab.selectedTab}
+            label={tab.label}
+            tabWidthFactor={numberOfTabs}
+            onClick={tab.onClick}
+          />
+        );
+      })}
     </View>
   );
 };
@@ -34,6 +46,7 @@ const HeaderTabs = ({ tabs }: HeaderTabsProps) => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    flexDirection: "row",
   },
   tabStyle: {},
   tabUnderlineStyle: {

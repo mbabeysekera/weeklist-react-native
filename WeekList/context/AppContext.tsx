@@ -11,6 +11,7 @@ import { Currency } from "@/constants/CurrencyTypes";
 
 export interface AppContextProps {
   userId: string;
+  listViewTab: number;
   thisWeek: ThisWeekSummaryProps;
   lastWeek: LastWeekSummaryProps;
 }
@@ -22,6 +23,7 @@ export interface AppContextState {
 
 const defaultAppState: AppContextProps = {
   userId: "",
+  listViewTab: 0,
   thisWeek: {
     allocatedBudget: 0,
     totalExpenses: 0,

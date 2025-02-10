@@ -31,18 +31,18 @@ const ThisWeekSummary = ({
   const { appContext, setAppContext } = context;
 
   // This will make sure the state is updated at component mount (https://stackoverflow.com/questions/62336340/cannot-update-a-component-while-rendering-a-different-component-warning)
-  // useEffect(() => {
-  //   setAppContext({
-  //     ...appContext,
-  //     thisWeek: {
-  //       currencyType,
-  //       allocatedBudget,
-  //       totalExpenses,
-  //       remainingItems,
-  //       extraPurchased,
-  //     },
-  //   });
-  // }, []);
+  useEffect(() => {
+    setAppContext({
+      ...appContext,
+      thisWeek: {
+        currencyType,
+        allocatedBudget,
+        totalExpenses,
+        remainingItems,
+        extraPurchased,
+      },
+    });
+  }, []);
   const balance = allocatedBudget - totalExpenses;
   const savingAspercentage = (balance / allocatedBudget) * 100;
   return (

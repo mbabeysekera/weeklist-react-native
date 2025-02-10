@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import React, { useContext } from "react";
 import { Colors } from "@/constants/Colors";
 import useThemeColor from "@/hooks/useThemeColor";
@@ -49,8 +49,9 @@ const App = () => {
         <Link
           href={"/(tabs)/list"}
           onPress={() => onWeekSummaryPressHandler(0)}
+          asChild
         >
-          <View style={styles.infoWithTopicContainer}>
+          <Pressable style={styles.infoWithTopicContainer}>
             <Text style={styles.summaryText}>This WeekList Summary</Text>
             <ThisWeekSummary
               currencyType="LKR"
@@ -59,13 +60,14 @@ const App = () => {
               remainingItems={5}
               extraPurchased={2}
             />
-          </View>
+          </Pressable>
         </Link>
         <Link
           href={"/(tabs)/list"}
           onPress={() => onWeekSummaryPressHandler(1)}
+          asChild
         >
-          <View style={styles.infoWithTopicContainer}>
+          <Pressable style={styles.infoWithTopicContainer}>
             <Text style={styles.summaryText}>Last WeekList Summary</Text>
             <LastWeekSummary
               currencyType="LKR"
@@ -74,7 +76,7 @@ const App = () => {
               remainingItems={4}
               extraPurchased={6}
             />
-          </View>
+          </Pressable>
         </Link>
       </View>
     </View>

@@ -13,6 +13,7 @@ const MAPPING = {
   "paperplane.fill": "send",
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",
+  "chevron.left": "chevron-left",
   "list.bullet.rectangle.fill": "view-list",
   "square.on.square.badge.person.crop.fill": "person",
   "app.badge": "apps",

@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import ListItem, { ListItemProps } from "@/components/card/ListItem";
 import ListTabHeader from "@/components/headers/ListTabHeader";
@@ -10,6 +10,7 @@ import useThemeColor from "@/hooks/useThemeColor";
 import ThisWeekSummary from "@/components/ThisWeekSummary";
 import LastWeekSummary from "@/components/LastWeekSummary";
 import { AppContext } from "@/context/AppContext";
+import { Link } from "expo-router";
 
 const dummyThisWeekLists: ListItemProps[] = [
   {
@@ -93,20 +94,25 @@ const List = () => {
         <ListTabHeader
           key="weekListHeader"
           label="Lists"
+          labelTextSize={20}
           icons={headerIconsProps}
           selectedTab={appContext.listViewTab}
           onTabPress={onTabPressHandler}
         />
       </AppHeader>
       {appContext.listViewTab === 0 && (
-        <>
-          <ThisWeekSummary
-            currencyType="LKR"
-            allocatedBudget={15000}
-            totalExpenses={10000}
-            remainingItems={5}
-            extraPurchased={2}
-          />
+        <View style={styles.thisWeekSummary}>
+          <Link href={"/pages/thisWeekListDetails"} asChild>
+            <Pressable>
+              <ThisWeekSummary
+                currencyType="LKR"
+                allocatedBudget={15000}
+                totalExpenses={10000}
+                remainingItems={5}
+                extraPurchased={2}
+              />
+            </Pressable>
+          </Link>
           <View style={styles.list}>
             {dummyThisWeekLists.map((listItem, index) => {
               return (
@@ -120,7 +126,7 @@ const List = () => {
               );
             })}
           </View>
-        </>
+        </View>
       )}
       {appContext.listViewTab === 1 && (
         <>
@@ -165,8 +171,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   list: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: "column",
+    width: "100%",
     marginTop: 8,
+  },
+  thisWeekSummary: {
+    flex: 1,
+    flexDirection: "column",
+    // backgroundColor: "blue",
   },
 });
